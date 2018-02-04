@@ -6,9 +6,10 @@
 
     <groupId>com.timunas</groupId>
     <artifactId>pole-position</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${release.version}-SNAPSHOT</version>
 
     <properties>
+        <release.version>1.0</release.version>
         <user.name>timunas</user.name>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -95,12 +96,12 @@
                                 <jdkPreference>preferJre</jdkPreference>
                             </jre>
                             <versionInfo>
-                                <fileVersion>1.0.0.0</fileVersion>
+                                <fileVersion>${release.version}.0.0</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>${project.name}</fileDescription>
                                 <copyright>2018 com.timunas</copyright>
-                                <productVersion>1.0.0.0</productVersion>
-                                <txtProductVersion>1.0.0.0</txtProductVersion>
+                                <productVersion>${release.version}.0.0</productVersion>
+                                <txtProductVersion>${release.version}.0.0</txtProductVersion>
                                 <productName>${project.name}</productName>
                                 <companyName>com.timunas</companyName>
                                 <internalName>PolePosition</internalName>
@@ -109,6 +110,34 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!--Deploy-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${project.build.directory}/PolePosition-${project.version}.exe</file>
+                                    <type>exe</type>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
             </plugin>
         </plugins>
     </build>
@@ -150,5 +179,12 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>bintray-timunas-tools</id>
+            <name>timunas-tools</name>
+            <url>https://api.bintray.com/maven/timunas/tools/pole-position/;publish=1</url>
+        </repository>
+    </distributionManagement>
 
 </project>
