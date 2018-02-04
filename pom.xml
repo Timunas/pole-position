@@ -6,7 +6,7 @@
 
     <groupId>com.timunas</groupId>
     <artifactId>pole-position</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <user.name>timunas</user.name>
@@ -73,12 +73,12 @@
                                 <jdkPreference>preferJre</jdkPreference>
                             </jre>
                             <versionInfo>
-                                <fileVersion>${version}.0.0</fileVersion>
+                                <fileVersion>1.0.0.0</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>${project.name}</fileDescription>
                                 <copyright>2018 com.timunas</copyright>
-                                <productVersion>${version}.0.0</productVersion>
-                                <txtProductVersion>${version}</txtProductVersion>
+                                <productVersion>1.0.0.0</productVersion>
+                                <txtProductVersion>1.0.0.0</txtProductVersion>
                                 <productName>${project.name}</productName>
                                 <companyName>com.timunas</companyName>
                                 <internalName>PolePosition</internalName>
