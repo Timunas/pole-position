@@ -11,6 +11,7 @@
     <properties>
         <user.name>timunas</user.name>
         <jdk.version>1.8</jdk.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
@@ -18,11 +19,32 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                 </configuration>
             </plugin>
+            <!-- Code Coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.9</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.3.0</version>
+            </plugin>
+            <!-- Executable Jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -48,21 +70,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Windows Executable -->
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
                 <version>1.7.21</version>
                 <executions>
                     <execution>
-                        <!--<id>l4j-clui</id>-->
                         <phase>package</phase>
                         <goals>
                             <goal>launch4j</goal>
                         </goals>
                         <configuration>
                             <headerType>gui</headerType>
-                            <jar>${project.build.directory}/${artifactId}-${version}-jar-with-dependencies.jar</jar>
-                            <outfile>${project.build.directory}/PolePosition-${version}.exe</outfile>
+                            <jar>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</jar>
+                            <outfile>${project.build.directory}/PolePosition-${project.version}.exe</outfile>
                             <downloadUrl>http://java.com/download</downloadUrl>
                             <classPath>
                                 <mainClass>com.timunas.Entry</mainClass>
@@ -82,7 +104,7 @@
                                 <productName>${project.name}</productName>
                                 <companyName>com.timunas</companyName>
                                 <internalName>PolePosition</internalName>
-                                <originalFilename>PolePosition-${version}.exe</originalFilename>
+                                <originalFilename>PolePosition-${project.version}.exe</originalFilename>
                             </versionInfo>
                         </configuration>
                     </execution>
