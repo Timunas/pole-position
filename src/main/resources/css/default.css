@@ -1,0 +1,28 @@
+.button-blue{
+    -fx-background-color: rgb(77,102,204);
+    -fx-text-fill: WHITE;
+}
+
+.button-green{
+    -fx-background-color: rgb(34,139,34);
+    -fx-text-fill: WHITE;
+}
+
+.button-red{
+    -fx-background-color: rgb(178,34,34);
+    -fx-text-fill: WHITE;
+}
+
+.button-orange{
+    -fx-background-color: rgb(255,140,0);
+    -fx-text-fill: WHITE;
+}
+
+.button-royal-blue{
+    -fx-background-color: rgb(65,105,225);
+    -fx-text-fill: WHITE;
+}
+
+.title-color {
+    -fx-text-fill: rgb(47,79,79);
+}

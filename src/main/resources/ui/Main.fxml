@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timunas.controllers.MainController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="66.0" prefWidth="800.0">
+         <children>
+            <Label fx:id="label" prefHeight="49.0" prefWidth="577.0" styleClass="title-color" stylesheets="@../css/default.css" text="Pole Position">
+               <font>
+                  <Font name="System Bold" size="40.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="216.0" spacing="30.0">
+               <children>
+                  <JFXButton fx:id="importBtn" buttonType="RAISED" onAction="#clickImportBtn" prefHeight="40.0" prefWidth="75.0" styleClass="button-blue" stylesheets="@../css/default.css" text="Import">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="exportRacesBtn" buttonType="RAISED" onAction="#clickExportRacesBtn" prefHeight="40.0" prefWidth="75.0" styleClass="button-blue" stylesheets="@../css/default.css" text="Export">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <JFXTreeTableView fx:id="raceTable" editable="true" prefHeight="512.0" prefWidth="800.0" />
+      <HBox prefHeight="54.0" prefWidth="808.0" spacing="10.0">
+         <children>
+            <HBox prefHeight="43.0" prefWidth="405.0" spacing="5.0">
+               <children>
+                  <JFXButton fx:id="addRaceBtn" onAction="#clickAddRaceBtn" prefHeight="45.0" prefWidth="110.0" styleClass="button-green" stylesheets="@../css/default.css" text="Add Race" />
+                  <JFXButton fx:id="editRaceBtn" onAction="#clickEditRaceBtn" prefHeight="45.0" prefWidth="110.0" styleClass="button-orange" stylesheets="@../css/default.css" text="Edit Race" />
+                  <JFXButton fx:id="removeRaceBtn" onAction="#clickRemoveRaceBtn" prefHeight="45.0" prefWidth="110.0" styleClass="button-red" stylesheets="@../css/default.css" text="Remove Race" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="434.0">
+               <children>
+                  <JFXButton fx:id="loadRaceBtn" onAction="#clickLoadRaceBtn" prefHeight="45.0" prefWidth="110.0" styleClass="button-royal-blue" stylesheets="@../css/default.css" text="Load" />
+               </children>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets bottom="2.0" left="5.0" right="5.0" top="1.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>
