@@ -11,7 +11,7 @@ import java.util.List;
  * @author Timunas
  * @since  1.0
  */
-public class Race {
+public class Race implements Comparable<Race> {
 
     private final int number;
     private final String name;
@@ -93,5 +93,16 @@ public class Race {
         List<Competitor> cloned = new ArrayList<>(competitors);
         Collections.sort(cloned);
         return cloned;
+    }
+
+    /**
+     * Compares this {@link Race#number} to another {@link Race#number}.
+     *
+     * @param other {@link Race} which will be compared to current one
+     * @return the comparator value, negative if less, positive if greater
+     */
+    @Override
+    public int compareTo(Race other) {
+        return Integer.compare(this.number, other.getNumber());
     }
 }

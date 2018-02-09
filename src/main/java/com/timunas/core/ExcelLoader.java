@@ -1,10 +1,7 @@
 package com.timunas.core;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,19 +31,19 @@ public class ExcelLoader {
             Iterator<Cell> cellIterator = currentRow.iterator();
 
             if (cellIterator.hasNext()) {
-                String firstCell = cellIterator.next().getStringCellValue();
+                Cell cell = cellIterator.next();
                 // Race row
-                if (!firstCell.isEmpty()) {
+                if (cell.getCellTypeEnum().equals(CellType.STRING)) {
                     if (currentRace != null) {
                         races.add(currentRace);
                     }
-                    currentRace = raceHeader(firstCell, cellIterator);
+                    currentRace = raceHeader(cell, cellIterator);
                     // Discard next headers row
                     if (rowIterator.hasNext()) {
                         rowIterator.next();
                     }
                 } else if (currentRace != null) { // Competitor row
-                    currentRace.addCompetitor(competitorRow(cellIterator));
+                    currentRace.addCompetitor(competitorRow(cell, cellIterator));
                 }
             }
         }
@@ -58,19 +55,20 @@ public class ExcelLoader {
         return races;
     }
 
-    private static Race raceHeader(String firstCell, Iterator<Cell> cellIterator) throws NoSuchElementException {
+    private static Race raceHeader(Cell firstCell, Iterator<Cell> cellIterator) throws NoSuchElementException {
         String name = cellIterator.next().getStringCellValue();
         // Iterate the two merged cells
         cellIterator.next();
         cellIterator.next();
         String rawTime = cellIterator.next().getStringCellValue();
 
-        int number = Integer.valueOf(firstCell.replace("Race ", "").trim());
+        int number = Integer.valueOf(firstCell.getStringCellValue().replace("Race ", "").trim());
         return new Race(number, name, LocalTime.parse(rawTime));
     }
 
 
-    private static Competitor competitorRow(Iterator<Cell> cellIterator) {
+    private static Competitor competitorRow(Cell firstCell, Iterator<Cell> cellIterator) {
+        int nbr = (int) firstCell.getNumericCellValue();
         String name = cellIterator.next().getStringCellValue();
         String club = cellIterator.next().getStringCellValue();
         String rawTime = cellIterator.next().getStringCellValue();
@@ -79,8 +77,8 @@ public class ExcelLoader {
                 .filter(r -> r.name().equalsIgnoreCase(rawTime)).findAny();
 
         return competitorResult
-                .map(r -> new Competitor(name, club, r))
-                .orElseGet(() -> new Competitor(name, club, LocalTime.parse(rawTime)));
+                .map(r -> new Competitor(nbr, name, club, r))
+                .orElseGet(() -> new Competitor(nbr, name, club, LocalTime.parse(rawTime)));
     }
 
 }
