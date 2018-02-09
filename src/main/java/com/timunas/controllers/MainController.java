@@ -8,6 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.timunas.core.ExcelGenerator;
 import com.timunas.core.ExcelLoader;
 import com.timunas.core.Race;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -26,6 +27,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +61,7 @@ public class MainController {
 
     @FXML
     public void initialize() {
+        Platform.runLater(() -> label.requestFocus());
         Font font = Font.loadFont(getClass().getClassLoader().getResourceAsStream("font/Bulletto Killa.ttf"), 50);
         label.setFont(font);
         label.setStyle("-fx-text-fill: rgb(47,79,79)");
@@ -81,12 +84,10 @@ public class MainController {
 
             if (!dialog.isCancelled()) {
                 //Create race
-                ObservableList<RaceWrapper> races = FXCollections.observableArrayList();
                 Race race = new Race(dialog.getNumber(), dialog.getName(), dialog.getTime());
                 raceList.add(race);
                 //Update table
-                raceList.forEach(r -> races.add(new RaceWrapper(r)));
-                updateRacesTable(races);
+                updateRacesTable(raceList);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,17 +122,16 @@ public class MainController {
                     stage.showAndWait();
 
                     //Create race
-                    ObservableList<RaceWrapper> races = FXCollections.observableArrayList();
                     if (dialog.isCancelled()) {
                         raceList.add(race); // If cancelled add old race
                     } else {
                         Race newRace = new Race(dialog.getNumber(), dialog.getName(), dialog.getTime());
+                        race.getCompetitors().forEach(newRace::addCompetitor);
                         raceList.add(newRace); // Else add new edited race
                     }
 
                     //Update table
-                    raceList.forEach(r -> races.add(new RaceWrapper(r)));
-                    updateRacesTable(races);
+                    updateRacesTable(raceList);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -213,10 +213,8 @@ public class MainController {
             } else {
                 try {
                     raceList = ExcelLoader.load(file.toPath());
-                    ObservableList<RaceWrapper> races = FXCollections.observableArrayList();
                     //Update table
-                    raceList.forEach(r -> races.add(new RaceWrapper(r)));
-                    updateRacesTable(races);
+                    updateRacesTable(raceList);
                 } catch (IOException e) {
                     errorAlert("Failed to import file: " + file.getAbsolutePath());
                     e.printStackTrace();
@@ -233,9 +231,7 @@ public class MainController {
                     .filter(race -> race.getNumber() == Integer.valueOf(number.getValue()))
                     .findFirst();
             first.ifPresent(race -> raceList.remove(race));
-            ObservableList<RaceWrapper> races = FXCollections.observableArrayList();
-            raceList.forEach(r -> races.add(new RaceWrapper(r)));
-            updateRacesTable(races);
+            updateRacesTable(raceList);
         }
     }
 
@@ -271,7 +267,10 @@ public class MainController {
         }
     }
 
-    private void updateRacesTable(ObservableList<RaceWrapper> races) {
+    private void updateRacesTable(List<Race> raceList) {
+        Collections.sort(raceList);
+        ObservableList<RaceWrapper> races = FXCollections.observableArrayList();
+        raceList.forEach(r -> races.add(new RaceWrapper(r)));
         JFXTreeTableColumn<RaceWrapper, String> nbrColumn = new JFXTreeTableColumn<>("Number");
         nbrColumn.setSortable(false);
         nbrColumn.setResizable(false);

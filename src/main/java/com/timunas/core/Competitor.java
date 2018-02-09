@@ -10,12 +10,14 @@ import java.time.LocalTime;
  */
 public class Competitor implements Comparable<Competitor> {
 
+    private final int number;
     private final String name;
     private final String club;
     private final LocalTime time;
     private final CompetitorResult competitorResult;
 
-    private Competitor(String name, String club, LocalTime time, CompetitorResult competitorResult) {
+    private Competitor(int number, String name, String club, LocalTime time, CompetitorResult competitorResult) {
+        this.number = number;
         this.name = name;
         this.club = club;
         this.time = time;
@@ -26,23 +28,34 @@ public class Competitor implements Comparable<Competitor> {
     /**
      * Creates a new instance of {@link Competitor}
      *
+     * @param number of {@link Competitor}
      * @param name of {@link Competitor}
      * @param club of {@link Competitor}
      * @param time of {@link Competitor} race
      */
-    public Competitor(String name, String club, LocalTime time) {
-        this(name, club, time, null);
+    public Competitor(int number, String name, String club, LocalTime time) {
+        this(number, name, club, time, null);
     }
 
     /**
      * Creates a new instance of {@link Competitor}
      *
+     * @param number of {@link Competitor}
      * @param name of {@link Competitor}
      * @param club of {@link Competitor}
      * @param competitorResult - result state of {@link Competitor}
      */
-    public Competitor(String name, String club, CompetitorResult competitorResult) {
-        this(name, club, LocalTime.MAX, competitorResult);
+    public Competitor(int number, String name, String club, CompetitorResult competitorResult) {
+        this(number, name, club, LocalTime.MAX, competitorResult);
+    }
+
+    /**
+     * Gets {@link Competitor} number.
+     *
+     * @return {@link Competitor} number
+     */
+    public int getNumber() {
+        return number;
     }
 
     /**

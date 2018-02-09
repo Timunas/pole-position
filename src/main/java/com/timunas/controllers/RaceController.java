@@ -8,6 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.timunas.core.Competitor;
 import com.timunas.core.ExcelGenerator;
 import com.timunas.core.Race;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -62,6 +63,7 @@ public class RaceController {
 
     @FXML
     public void initialize() {
+        Platform.runLater(() -> Label.requestFocus());
         updateTable(FXCollections.observableArrayList());
         newCompetitors = new ArrayList<>();
     }
@@ -111,9 +113,9 @@ public class RaceController {
     @FXML
     void clickEditBtn(ActionEvent event) {
         if(TableView.getSelectionModel().getSelectedItem() != null) {
-            StringProperty name = TableView.getSelectionModel().getSelectedItem().getValue().name;
+            StringProperty number = TableView.getSelectionModel().getSelectedItem().getValue().number;
             Optional<Competitor> editedCompetitor = newCompetitors.stream()
-                    .filter(competitor -> competitor.getName().equalsIgnoreCase(name.getValue()))
+                    .filter(competitor -> competitor.getNumber() == Integer.valueOf(number.getValue()))
                     .findFirst();
             editedCompetitor.ifPresent( competitor -> {
                 FXMLLoader loader = new FXMLLoader();
@@ -128,8 +130,9 @@ public class RaceController {
                     // Remove competitor from current list temporarily for correct edition
                     newCompetitors.remove(competitor);
                     // Pass  current editing data
-                    dialog.setCompetitorLabel("Edit Competitor - "+ competitor.getName());
+                    dialog.setCompetitorLabel("Edit Competitor");
                     dialog.setCompetitorList(newCompetitors);
+                    dialog.setNumber(competitor.getNumber());
                     dialog.setName(competitor.getName());
                     dialog.setClub(competitor.getClub());
                     if(competitor.getCompetitorResult() == null) {
@@ -159,9 +162,9 @@ public class RaceController {
     @FXML
     void clickRemoveBtn(ActionEvent event) {
         if (TableView.getSelectionModel().getSelectedItem() != null) {
-            StringProperty name = TableView.getSelectionModel().getSelectedItem().getValue().name;
+            StringProperty number = TableView.getSelectionModel().getSelectedItem().getValue().number;
             Optional<Competitor> first = newCompetitors.stream()
-                    .filter(c -> c.getName().equalsIgnoreCase(name.getValue()))
+                    .filter(c -> c.getNumber() == Integer.valueOf(number.getValue()))
                     .findFirst();
             first.ifPresent(competitor -> newCompetitors.remove(competitor));
             ObservableList<CompetitorWrapper> competitorWrappers = FXCollections.observableArrayList();
@@ -247,20 +250,28 @@ public class RaceController {
             result.ifPresent( r -> {
                 if (r != ButtonType.YES) {
                     windowEvent.consume();
-                } else {
-                    // Update competitors
-                    race.getCompetitors().forEach(competitor -> race.removeCompetitor(competitor));
-                    newCompetitors.forEach(competitor -> race.addCompetitor(competitor));
                 }
             });
         });
     }
 
     private void updateTable(ObservableList<CompetitorWrapper> competitors) {
+        JFXTreeTableColumn<CompetitorWrapper, String> numberColumn = new JFXTreeTableColumn<>("Nbr");
+        numberColumn.setSortable(false);
+        numberColumn.setResizable(false);
+        numberColumn.setPrefWidth(50);
+        numberColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CompetitorWrapper, String> param) -> {
+            if (numberColumn.validateValue(param)) {
+                return param.getValue().getValue().number;
+            } else {
+                return numberColumn.getComputedValue(param);
+            }
+        });
+
         JFXTreeTableColumn<CompetitorWrapper, String> nameColumn = new JFXTreeTableColumn<>("Name");
         nameColumn.setSortable(false);
         nameColumn.setResizable(false);
-        nameColumn.setPrefWidth(450);
+        nameColumn.setPrefWidth(400);
         nameColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<CompetitorWrapper, String> param) -> {
             if (nameColumn.validateValue(param)) {
                 return param.getValue().getValue().name;
@@ -297,19 +308,21 @@ public class RaceController {
         TableView.setRoot(root);
         TableView.setShowRoot(false);
         TableView.setEditable(false);
-        TableView.getColumns().setAll(nameColumn, clubColumn, timeColumn);
+        TableView.getColumns().setAll(numberColumn, nameColumn, clubColumn, timeColumn);
     }
 
 
     private static final class CompetitorWrapper extends RecursiveTreeObject<CompetitorWrapper> {
+        StringProperty number;
         StringProperty name;
         StringProperty club;
         StringProperty time;
         private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss.SS");
 
         CompetitorWrapper(Competitor competitor) {
-            this.name = new SimpleStringProperty(competitor.getName());
-            this.club = new SimpleStringProperty(competitor.getClub()) ;
+            this.number = new SimpleStringProperty(String.valueOf(competitor.getNumber()));
+            this.name   = new SimpleStringProperty(competitor.getName());
+            this.club   = new SimpleStringProperty(competitor.getClub()) ;
             if(competitor.getCompetitorResult() == null) {
                 this.time = new SimpleStringProperty(competitor.getTime().format(dtf));
             } else {
@@ -320,9 +333,9 @@ public class RaceController {
 
     private Competitor createCompetitorWithDialog(CompetitorDialogController dialog){
         if(dialog.getTime() == null) {
-            return new Competitor(dialog.getName(), dialog.getClub(), dialog.getResult());
+            return new Competitor(dialog.getNumber(), dialog.getName(), dialog.getClub(), dialog.getResult());
         } else {
-            return new Competitor(dialog.getName(), dialog.getClub(), dialog.getTime());
+            return new Competitor(dialog.getNumber(), dialog.getName(), dialog.getClub(), dialog.getTime());
         }
     }
 

@@ -86,8 +86,10 @@ public class ExcelGenerator {
         CellStyle defaultStyle = defaultStyle(wb);
         defaultStyle.setAlignment(HorizontalAlignment.CENTER);
 
-        //TODO - Add Dorsal
-        header.createCell(0).setCellStyle(defaultStyle);
+        //Number
+        Cell number = header.createCell(0);
+        number.setCellStyle(defaultStyle);
+        number.setCellValue(createHelper.createRichTextString("Nbr"));
         // Name
         Cell name = header.createCell(1);
         name.setCellStyle(defaultStyle);
@@ -113,8 +115,10 @@ public class ExcelGenerator {
         CellStyle defaultStyle = defaultStyle(wb);
         defaultStyle.setAlignment(HorizontalAlignment.CENTER);
 
-        //TODO - Add Dorsal Number
-        header.createCell(0).setCellStyle(defaultStyle);
+        //Number
+        Cell number = header.createCell(0);
+        number.setCellStyle(defaultStyle);
+        number.setCellValue(competitor.getNumber());
         // Name
         Cell name = header.createCell(1);
         CellStyle leftStyle = defaultStyle(wb);

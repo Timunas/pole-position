@@ -27,7 +27,7 @@ public class RaceTest {
         Race race = new Race(1, name, raceTime);
 
         LocalTime time = LocalTime.parse("20:30:04");
-        Competitor comp = new Competitor("John Doe", "Benfica", time);
+        Competitor comp = new Competitor(1, "John Doe", "Benfica", time);
 
         assertThat(race.getCompetitors()).isEmpty();
         race.removeCompetitor(comp);
@@ -40,15 +40,15 @@ public class RaceTest {
         String name = "John Doe";
         String club = "Benfica";
         LocalTime time = LocalTime.parse("20:30:04");
-        Competitor comp = new Competitor(name, club, time);
+        Competitor comp = new Competitor(1, name, club, time);
 
         String otherName = "Jane Doe";
         LocalTime otherTime = LocalTime.parse("20:29:04");
-        Competitor otherComp = new Competitor(otherName, club, otherTime);
+        Competitor otherComp = new Competitor(2, otherName, club, otherTime);
 
         String anotherName = "William Doe";
         LocalTime anotherTime = LocalTime.parse("19:29:02");
-        Competitor anotherComp = new Competitor(anotherName, club, anotherTime);
+        Competitor anotherComp = new Competitor(3, anotherName, club, anotherTime);
 
         LocalTime raceTime = LocalTime.parse("09:00");
         Race race = new Race(1,"Assortment Race", raceTime);

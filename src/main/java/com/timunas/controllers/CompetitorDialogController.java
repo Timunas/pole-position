@@ -25,6 +25,9 @@ public class CompetitorDialogController {
     private Label CompetitorLabel;
 
     @FXML
+    private JFXTextField NumberField;
+
+    @FXML
     private JFXTextField NameField;
 
     @FXML
@@ -39,6 +42,7 @@ public class CompetitorDialogController {
     @FXML
     private JFXButton CancelBtn;
 
+    private String number;
     private String name;
     private String club;
     private String result;
@@ -47,6 +51,10 @@ public class CompetitorDialogController {
     private boolean cancelled;
     private List<Competitor> competitorList;
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss.SS");
+
+    public int getNumber() {
+        return Integer.valueOf(number);
+    }
 
     public String getName() {
         return name;
@@ -70,6 +78,10 @@ public class CompetitorDialogController {
 
     public void setCompetitorList(List<Competitor> competitorList) {
         this.competitorList = competitorList;
+    }
+
+    public void setNumber(int number) {
+        NumberField.setText(String.valueOf(number));
     }
 
     public void setName(String name) {
@@ -107,8 +119,9 @@ public class CompetitorDialogController {
 
     @FXML
     void clickOkBtn(ActionEvent event) {
+        number = NumberField.getText();
         name   = NameField.getText();
-        club = ClubField.getText();
+        club   = ClubField.getText();
         result = TimeField.getText();
 
         if (validInputs()) {
@@ -121,8 +134,15 @@ public class CompetitorDialogController {
 
 
     private boolean validInputs() {
-        if (club.isEmpty() || name.isEmpty() || result.isEmpty()) {
+        if (number.isEmpty() || club.isEmpty() || name.isEmpty() || result.isEmpty()) {
             errorAlert("Please define all inputs...");
+            return false;
+        }
+
+        boolean numberAlreadyExist = competitorList
+                .stream().anyMatch(c -> String.valueOf(c.getNumber()).equalsIgnoreCase(number));
+        if (numberAlreadyExist) {
+            errorAlert("The competitor number you are trying to add already exist. Conflict competitor number: "+ number);
             return false;
         }
 

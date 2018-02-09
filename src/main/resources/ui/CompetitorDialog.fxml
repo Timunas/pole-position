@@ -36,26 +36,33 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Competitor Name">
+             <Label text="Number">
+                 <GridPane.margin>
+                     <Insets left="20.0" />
+                 </GridPane.margin>
+             </Label>
+            <Label text="Name" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Club" GridPane.rowIndex="1">
+            <Label text="Club" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Time" GridPane.rowIndex="2">
+            <Label text="Time" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
             </Label>
-            <JFXTextField fx:id="NameField" GridPane.columnIndex="1" />
-            <JFXTextField fx:id="ClubField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <JFXTextField fx:id="TimeField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+             <JFXTextField fx:id="NumberField" GridPane.columnIndex="1" />
+             <JFXTextField fx:id="NameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+             <JFXTextField fx:id="ClubField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+             <JFXTextField fx:id="TimeField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <Separator prefWidth="200.0" />
