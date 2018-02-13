@@ -6,7 +6,7 @@
 
     <groupId>com.timunas</groupId>
     <artifactId>pole-position</artifactId>
-    <version>${release.version}-SNAPSHOT</version>
+    <version>${release.version}</version>
 
     <properties>
         <release.version>2.0</release.version>
