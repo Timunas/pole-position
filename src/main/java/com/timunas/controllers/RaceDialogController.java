@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
@@ -48,6 +49,7 @@ public class RaceDialogController {
         raceList = new ArrayList<>();
         cancelled = true;
         TimeField.setText("00:00");
+        TimeField.setTooltip(new Tooltip("Format: HH:MM:SS or HH:MM"));
     }
 
     public int getNumber() {

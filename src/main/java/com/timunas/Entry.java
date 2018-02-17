@@ -1,5 +1,6 @@
 package com.timunas;
 
+import com.timunas.utils.Utils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,6 +24,14 @@ public class Entry extends Application{
 
         //Adding the scene to Stage
         primaryStage.setScene(scene);
+
+        //Defining an alert for application close requests
+        Utils.alertExitWithoutSaving(
+                primaryStage,
+                "Pole Position",
+                "Closing Pole Position",
+                "Do you really want to close the application? \nNote that all unsaved changes will be lost!"
+        );
 
         //Displaying the contents of the stage
         primaryStage.show();

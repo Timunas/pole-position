@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
@@ -109,6 +110,7 @@ public class CompetitorDialogController {
         competitorList = new ArrayList<>();
         cancelled = true;
         TimeField.setText("00:00:00");
+        TimeField.setTooltip(new Tooltip("Format: HH:MM:SS or HH:MM:SS.ss\nOr use default results: DNS, DNF, DSQ"));
     }
 
     @FXML
