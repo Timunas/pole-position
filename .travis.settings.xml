@@ -5,5 +5,10 @@
             <username>${env.BINTRAY_USER}</username>
             <password>${env.BINTRAY_API_KEY}</password>
         </server>
+        <server>
+            <id>github-timunas-pole-position</id>
+            <username>${env.GITHUB_USER}</username>
+            <password>${env.GITHUB_PASS}</password>
+        </server>
     </servers>
 </settings>
