@@ -9,7 +9,7 @@ if [[ $TRAVIS_TAG = *"RELEASE-"* ]]; then
         git checkout -b $BRANCH origin/$BRANCH
         mvn clean -B -DreleaseVersion=$PARSED_VERSION -Dtag=$PARSED_TAG -Dusername=$GITHUB_USER -Dpassword=$GITHUB_PASS \
         release:prepare release:perform --settings .travis.settings.xml
-        git push --delete https://$GITHUB_USER:$GITHUB_PASS@github.com/$TRAVIS_REPO_SLUG $TRAVIS_TAG
+        git push --delete https://$GITHUB_USER:$GITHUB_PASS@github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_TAG
     else
         echo "$TRAVIS_TAG : This is not a release tag! Skipping deploy phase..."
 fi
