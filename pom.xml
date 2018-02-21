@@ -214,6 +214,6 @@
         <connection>scm:git:https://github.com/Timunas/pole-position.git</connection>
         <url>https://github.com/Timunas/pole-position</url>
         <developerConnection>scm:git:https://github.com/Timunas/pole-position.git</developerConnection>
-      <tag>HEAD</tag>
+        <tag>HEAD</tag>
   </scm>
 </project>
