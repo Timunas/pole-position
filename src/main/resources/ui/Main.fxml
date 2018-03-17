@@ -4,20 +4,37 @@
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timunas.controllers.MainController">
    <children>
-      <HBox alignment="CENTER" prefHeight="66.0" prefWidth="800.0">
+      <HBox alignment="CENTER" maxHeight="66.0" prefHeight="66.0" prefWidth="800.0">
          <children>
-            <Label fx:id="label" prefHeight="49.0" prefWidth="577.0" styleClass="title-color" stylesheets="@../css/default.css" text="Pole Position">
-               <font>
-                  <Font name="System Bold" size="40.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="216.0" spacing="30.0">
+            <HBox prefHeight="100.0" prefWidth="580.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="66.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icon/flag.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="label" prefHeight="66.0" prefWidth="577.0" styleClass="title-color" stylesheets="@../css/default.css" text="Pole Position">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                  </Label>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="220.0" spacing="30.0">
                <children>
                   <JFXButton fx:id="importBtn" buttonType="RAISED" onAction="#clickImportBtn" prefHeight="40.0" prefWidth="75.0" styleClass="button-blue" stylesheets="@../css/default.css" text="Import">
                      <font>

@@ -236,25 +236,6 @@ public class RaceController {
         }
     }
 
-    public void setCloseEvent() {
-        Stage stage = (Stage) AddBtn.getScene().getWindow();
-        stage.setOnCloseRequest(windowEvent -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.getButtonTypes().clear();
-            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-            alert.setTitle("Race Editor");
-            alert.setHeaderText("Closing Race Editor");
-            alert.setContentText("Do you really want to close without saving? \nNote that all changes will be lost!");
-            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            Optional<ButtonType> result = alert.showAndWait();
-            result.ifPresent( r -> {
-                if (r != ButtonType.YES) {
-                    windowEvent.consume();
-                }
-            });
-        });
-    }
-
     private void updateTable(ObservableList<CompetitorWrapper> competitors) {
         JFXTreeTableColumn<CompetitorWrapper, String> numberColumn = new JFXTreeTableColumn<>("Nbr");
         numberColumn.setSortable(false);

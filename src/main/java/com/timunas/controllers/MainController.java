@@ -8,6 +8,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.timunas.core.ExcelGenerator;
 import com.timunas.core.ExcelLoader;
 import com.timunas.core.Race;
+import com.timunas.utils.Utils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -252,7 +253,12 @@ public class MainController {
                 try {
                     stage.setScene(new Scene(loader.load(), 800, 600));
                     RaceController dialog = loader.getController();
-                    dialog.setCloseEvent();
+                    Utils.alertExitWithoutSaving(
+                            stage,
+                            "Race Editor",
+                            "Closing Race Editor",
+                            "Do you really want to close the race editor? \nNote that all unsaved changes will be lost!"
+                    );
                     dialog.setRace(race);
 
                     Stage mainStage = (Stage)((Button) actionEvent.getSource()).getScene().getWindow();
