@@ -73,8 +73,12 @@ public class ExcelLoader {
         String club = cellIterator.next().getStringCellValue();
         String rawTime = cellIterator.next().getStringCellValue();
 
-        Optional<CompetitorResult> competitorResult = Arrays.stream(CompetitorResult.values())
-                .filter(r -> r.name().equalsIgnoreCase(rawTime)).findAny();
+        Optional<CompetitorResult> competitorResult;
+        if (rawTime.equals("\u2014")) {
+            competitorResult = Optional.ofNullable(CompetitorResult.fromString(cellIterator.next().getStringCellValue()));
+        } else {
+            competitorResult = Optional.empty();
+        }
 
         return competitorResult
                 .map(r -> new Competitor(nbr, name, club, r))

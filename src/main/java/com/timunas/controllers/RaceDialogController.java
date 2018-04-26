@@ -49,7 +49,7 @@ public class RaceDialogController {
         raceList = new ArrayList<>();
         cancelled = true;
         TimeField.setText("00:00");
-        TimeField.setTooltip(new Tooltip("Format: HH:MM:SS or HH:MM"));
+        TimeField.setTooltip(new Tooltip("Format: HH:MM"));
     }
 
     public int getNumber() {
@@ -125,10 +125,10 @@ public class RaceDialogController {
             return false;
         }
 
-        // It should match HH:MM:SS or HH:MM
+        // It should match HH:MM
         Optional<LocalTime> optional = validTime();
         if (!optional.isPresent()) {
-            errorAlert("Please specify a correct race time. Format: HH:MM:SS or HH:MM");
+            errorAlert("Please specify a correct race time. Format: HH:MM");
             return false;
         } else {
             parsedTime = optional.get();
@@ -138,8 +138,8 @@ public class RaceDialogController {
     }
 
     private Optional<LocalTime> validTime() {
-        // It should match HH:MM:SS or HH:MM
-        if (!(rawTime.matches("^[0-9]{2}:[0-9]{2}:[0-9]{2}$") || rawTime.matches("^[0-9]{2}:[0-9]{2}$"))) {
+        // It should match HH:MM
+        if (!rawTime.matches("^[0-9]{2}:[0-9]{2}$")) {
             return Optional.empty();
         }
 
@@ -153,14 +153,7 @@ public class RaceDialogController {
                 return Optional.of(LocalTime.of(hours,minutes, 0));
             }
         } else {
-            int hours   = Integer.valueOf(split[0]);
-            int minutes = Integer.valueOf(split[1]);
-            int seconds = Integer.valueOf(split[2]);
-            if (hours < 0 || hours > 23 || minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60) {
-                return Optional.empty();
-            } else {
-                return Optional.of(LocalTime.of(hours, minutes, seconds));
-            }
+            return Optional.empty();
         }
     }
 

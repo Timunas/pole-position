@@ -46,7 +46,7 @@ public class Competitor implements Comparable<Competitor> {
      * @param competitorResult - result state of {@link Competitor}
      */
     public Competitor(int number, String name, String club, CompetitorResult competitorResult) {
-        this(number, name, club, LocalTime.MAX, competitorResult);
+        this(number, name, club, competitorResult.time(), competitorResult);
     }
 
     /**
@@ -103,12 +103,6 @@ public class Competitor implements Comparable<Competitor> {
      */
     @Override
     public int compareTo(Competitor other) {
-        if (competitorResult == CompetitorResult.DNF) {
-            return this.time.minusNanos(2).compareTo(other.getTime());
-        } else if (competitorResult == CompetitorResult.DSQ) {
-            return this.time.minusNanos(1).compareTo(other.getTime());
-        } else {
-            return this.time.compareTo(other.getTime());
-        }
+        return this.time.compareTo(other.getTime());
     }
 }

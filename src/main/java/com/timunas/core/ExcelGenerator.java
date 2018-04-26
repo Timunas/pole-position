@@ -55,7 +55,7 @@ public class ExcelGenerator {
     }
 
     private static void raceHeader(Workbook wb, Race race, int rowIndex) {
-        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         CreationHelper createHelper = wb.getCreationHelper();
         Row header = wb.getSheetAt(0).createRow(rowIndex);
         CellStyle defaultStyle = defaultStyle(wb);
@@ -129,14 +129,22 @@ public class ExcelGenerator {
         Cell club = header.createCell(2);
         club.setCellStyle(defaultStyle);
         club.setCellValue(createHelper.createRichTextString(competitor.getClub()));
-        // Time
+        // Time or Result
         Cell time = header.createCell(3);
         time.setCellStyle(defaultStyle);
-        time.setCellValue(createHelper.createRichTextString(competitor.getTime().format(dtf)));
+        if (competitor.getCompetitorResult() == null) {
+            time.setCellValue(createHelper.createRichTextString(competitor.getTime().format(dtf)));
+        } else {
+            time.setCellValue(createHelper.createRichTextString("\u2014"));
+        }
         // Classification
         Cell raceTime = header.createCell(4);
         raceTime.setCellStyle(defaultStyle);
-        raceTime.setCellValue(classification);
+        if (competitor.getCompetitorResult() == null) {
+            raceTime.setCellValue(classification);
+        } else {
+            raceTime.setCellValue(createHelper.createRichTextString(competitor.getCompetitorResult().toString()));
+        }
     }
 
     private static CellStyle defaultStyle(Workbook wb) {
