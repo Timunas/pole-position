@@ -23,6 +23,11 @@
     -fx-text-fill: WHITE;
 }
 
+.button-dodger-blue{
+    -fx-background-color: rgb(25,181,254);
+    -fx-text-fill: WHITE;
+}
+
 .title-color {
     -fx-text-fill: rgb(47,79,79);
 }

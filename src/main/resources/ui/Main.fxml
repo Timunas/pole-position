@@ -53,11 +53,12 @@
       <JFXTreeTableView fx:id="raceTable" editable="true" prefHeight="512.0" prefWidth="800.0" />
       <HBox prefHeight="54.0" prefWidth="808.0" spacing="10.0">
          <children>
-            <HBox prefHeight="43.0" prefWidth="405.0" spacing="5.0">
+            <HBox prefHeight="37.0" prefWidth="744.0" spacing="5.0">
                <children>
                   <JFXButton fx:id="addRaceBtn" onAction="#clickAddRaceBtn" prefHeight="45.0" prefWidth="110.0" styleClass="button-green" stylesheets="@../css/default.css" text="Add Race" />
                   <JFXButton fx:id="editRaceBtn" onAction="#clickEditRaceBtn" prefHeight="45.0" prefWidth="110.0" styleClass="button-orange" stylesheets="@../css/default.css" text="Edit Race" />
                   <JFXButton fx:id="removeRaceBtn" onAction="#clickRemoveRaceBtn" prefHeight="45.0" prefWidth="110.0" styleClass="button-red" stylesheets="@../css/default.css" text="Remove Race" />
+                  <JFXButton fx:id="mergeBtn" onAction="#clickMergeBtn" prefHeight="45.0" prefWidth="110.0" styleClass="button-dodger-blue" stylesheets="@../css/default.css" text="Merge Races" />
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="434.0">

@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.timunas.core.Competitor;
 import com.timunas.core.ExcelGenerator;
 import com.timunas.core.ExcelLoader;
 import com.timunas.core.Race;
@@ -27,10 +28,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainController {
 
@@ -53,6 +52,9 @@ public class MainController {
     private JFXButton removeRaceBtn;
 
     @FXML
+    private JFXButton mergeBtn;
+
+    @FXML
     private JFXButton loadRaceBtn;
 
     @FXML
@@ -67,6 +69,10 @@ public class MainController {
         label.setFont(font);
         label.setStyle("-fx-text-fill: rgb(47,79,79)");
         updateRacesTable(FXCollections.observableArrayList());
+
+        raceTable.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
     }
 
     @FXML
@@ -97,12 +103,12 @@ public class MainController {
 
     @FXML
     void clickEditRaceBtn(ActionEvent actionEvent) {
-        if(raceTable.getSelectionModel().getSelectedItem() != null) {
+        if (raceTable.getSelectionModel().getSelectedItem() != null) {
             StringProperty number = raceTable.getSelectionModel().getSelectedItem().getValue().number;
             Optional<Race> editedRace = raceList.stream()
                     .filter(race -> race.getNumber() == Integer.valueOf(number.getValue()))
                     .findFirst();
-            editedRace.ifPresent( race -> {
+            editedRace.ifPresent(race -> {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource("ui/RaceDialog.fxml"));
                 Stage stage = new Stage();
@@ -153,7 +159,7 @@ public class MainController {
 
         //Show save file dialog
         File file = fileChooser.showSaveDialog(((Button) event.getSource()).getScene().getWindow());
-        if(file != null){
+        if (file != null) {
             if (!file.getName().endsWith(".xls")) {
                 file = new File(file.getAbsolutePath() + ".xls");
             }
@@ -197,7 +203,7 @@ public class MainController {
 
         //Show open file dialog
         File file = fileChooser.showOpenDialog(((Button) event.getSource()).getScene().getWindow());
-        if(file != null){
+        if (file != null) {
             if (!file.getName().endsWith(".xls")) {
                 file = new File(file.getAbsolutePath() + ".xls");
             }
@@ -237,13 +243,56 @@ public class MainController {
     }
 
     @FXML
+    void clickMergeBtn(ActionEvent actionEvent) {
+        if (raceTable.getSelectionModel().getSelectedItem() != null) {
+            List<Competitor> competitors = mergeCells();
+
+            if (competitors.isEmpty()) {
+                errorAlert("Can't merge selected races! There are competitors with same number...");
+            } else {
+                // Remove unmerged races
+                raceTable.getSelectionModel().getSelectedCells().forEach(cell -> {
+                    Optional<Race> first = raceList.stream()
+                            .filter(race -> race.getNumber() == Integer.valueOf(cell.getTreeItem().getValue().number.getValue()))
+                            .findFirst();
+                    first.ifPresent(race -> raceList.remove(race));
+                });
+                // Add merged race
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getClassLoader().getResource("ui/RaceDialog.fxml"));
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setTitle("Merged Race");
+                stage.setResizable(false);
+                try {
+                    stage.setScene(new Scene(loader.load(), 550, 300));
+                    RaceDialogController dialog = loader.getController();
+                    dialog.setRaceList(raceList);
+                    stage.showAndWait();
+
+                    if (!dialog.isCancelled()) {
+                        //Create race
+                        Race race = new Race(dialog.getNumber(), dialog.getName(), dialog.getTime());
+                        competitors.forEach(race::addCompetitor);
+                        raceList.add(race);
+                        //Update table
+                        updateRacesTable(raceList);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @FXML
     void clickLoadRaceBtn(ActionEvent actionEvent) {
-        if(raceTable.getSelectionModel().getSelectedItem() != null) {
+        if (raceTable.getSelectionModel().getSelectedItem() != null) {
             StringProperty number = raceTable.getSelectionModel().getSelectedItem().getValue().number;
             Optional<Race> loadedRace = raceList.stream()
                     .filter(race -> race.getNumber() == Integer.valueOf(number.getValue()))
                     .findFirst();
-            loadedRace.ifPresent( race -> {
+            loadedRace.ifPresent(race -> {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource("ui/Race.fxml"));
                 Stage stage = new Stage();
@@ -261,7 +310,7 @@ public class MainController {
                     );
                     dialog.setRace(race);
 
-                    Stage mainStage = (Stage)((Button) actionEvent.getSource()).getScene().getWindow();
+                    Stage mainStage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                     mainStage.hide();
 
                     stage.showAndWait();
@@ -271,6 +320,29 @@ public class MainController {
                 }
             });
         }
+    }
+
+    private List<Competitor> mergeCells() {
+        Map<Integer, Competitor> competitors = new HashMap<>();
+        List<TreeItem<RaceWrapper>> cells = raceTable.getSelectionModel().getSelectedCells().stream()
+                .map(TreeTablePosition::getTreeItem).collect(Collectors.toList());
+
+        for (TreeItem<RaceWrapper> row : cells) {
+            Optional<Race> mergedRace = raceList.stream()
+                    .filter(race -> race.getNumber() == Integer.valueOf(row.getValue().number.getValue()))
+                    .findFirst();
+            if (mergedRace.isPresent()) {
+                for (Competitor comp : mergedRace.get().getCompetitors()) {
+                    if (competitors.containsKey(comp.getNumber())) {
+                        return Collections.emptyList();
+                    } else {
+                        competitors.put(comp.getNumber(), comp);
+                    }
+                }
+            }
+        }
+
+        return new ArrayList<>(competitors.values());
     }
 
     private void updateRacesTable(List<Race> raceList) {
@@ -326,7 +398,7 @@ public class MainController {
         StringProperty time;
 
         RaceWrapper(Race race) {
-            this.number = new SimpleStringProperty(String.valueOf(race.getNumber())) ;
+            this.number = new SimpleStringProperty(String.valueOf(race.getNumber()));
             this.name = new SimpleStringProperty(race.getName());
             this.time = new SimpleStringProperty(race.getTime().toString());
         }
